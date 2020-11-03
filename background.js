@@ -11,4 +11,4 @@ chrome.webRequest.onBeforeRequest.addListener((requestDetails)=>{
         }
     });
 
-},{urls: ["<all_urls>"], types: ['main_frame'], }, ['blocking']);
+},{urls: ["*://*.rsk/*"], types: ['main_frame'], }, ['blocking']);
