@@ -23,6 +23,7 @@ var options = {
   entry: {
     popup: path.join(__dirname, "src", "js", "popup.js"),
     options: path.join(__dirname, "src", "js", "options.js"),
+    loading: path.join(__dirname, "src", "js", "loading.js"),
     background: path.join(__dirname, "src", "js", "background.js")
   },
   output: {
@@ -75,6 +76,7 @@ var options = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "loading.html"),
       filename: "loading.html",
+      chunks: ["loading"]
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "options.html"),
