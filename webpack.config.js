@@ -73,6 +73,10 @@ var options = {
       chunks: ["popup"]
     }),
     new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "loading.html"),
+      filename: "loading.html",
+    }),
+    new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "options.html"),
       filename: "options.html",
       chunks: ["options"]
