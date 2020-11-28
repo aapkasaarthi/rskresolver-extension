@@ -2,7 +2,7 @@
   "name": "RNS Resolver",
   "description": "RSK Testnet - RNS ContentHash Resolver",
   "manifest_version": 2,
-  "version": "0.2.1",
+  "version": "0.2.0",
   "options_page": "options.html",
   "background": {
     "page": "background.html"
@@ -19,9 +19,10 @@
     "webRequest",
     "webRequestBlocking",
     "tabs",
-    "*://*.rsk/*"
+    "*://*.rsk/*",
+    "storage"
   ],
   "web_accessible_resources": [
-    "loading.html"
+    "loading.html", "invalid.html"
   ]
 }

@@ -1,23 +1,47 @@
 import RNS  from '@rsksmart/rns';
 import Web3 from 'web3';
 
-const web3 = new Web3('https://public-node.testnet.rsk.co');
-const rns = new RNS(web3);
-console.log(web3.version);
-
 async function redirectToIpfs(url, tabId){
-    rns.contenthash(url.hostname)
+
+    const networks = {
+        '30':'https://public-node.rsk.co', // Mainnet
+        '31':'https://public-node.testnet.rsk.co' // Testnet
+    }
+
+    chrome.storage.local.get(['network'], function(networkData) {
+
+        const web3 = new Web3(networks[networkData.network]);
+        const rns = new RNS(web3);
+
+        rns.contenthash(url.hostname)
         .then(contenthash =>{
             console.log(contenthash, tabId);
+            if (contenthash.protocolType === 'ipfs' || contenthash.protocolType === 'ipns'){
+                chrome.tabs.update(tabId,
+                    {
+                        url: `https://ipfs.io/${contenthash.protocolType}/${contenthash.decoded}`
+                    }
+                );
+            }
+            else if(contenthash.protocolType === 'onion' || contenthash.protocolType === 'onion3'){
+                chrome.tabs.update(tabId,
+                    {
+                        url: `https://${contenthash.decoded}.onion.to`
+                    }
+                );
+            }
+        })
+        .catch(e=>{
+            console.log('err');
             chrome.tabs.update(tabId,
                 {
-                    url: `https://ipfs.io/${contenthash.protocolType}/${contenthash.decoded}`
+                    url: `invalid.html?dn=${url.hostname}`
                 }
             );
         })
-        .catch(e=>{
-            console.log(e);
-        })
+
+    });
+
 }
 
 chrome.webRequest.onBeforeRequest.addListener((requestDetails)=>{
@@ -31,3 +55,4 @@ chrome.webRequest.onBeforeRequest.addListener((requestDetails)=>{
         },
     )
 },{urls: ["*://*.rsk/*"], types: ['main_frame'], }, ['blocking']);
+
